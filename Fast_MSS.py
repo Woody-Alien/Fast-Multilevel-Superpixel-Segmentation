@@ -109,6 +109,23 @@ def compute_segmentations(start_iter, end_iter, num_iter):
     # returns a list containing values in descending order
     return [int(start_iter * math.pow(reduction_factor, iters)) for iters in np.arange(num_iter)]
 
+def probs(a, null_value = NO_LABEL):
+    
+    '''
+    My method for receiving probabilities instead of 0 and 1.
+    Works only for binary classification problems, but can yield better
+    fine-tuned results when properly analysed for a good threshold.
+    '''
+    assert len(np.unique(a)) <= 3, "Can only be used for binary classification tasks."
+        
+    a = np.array(a)
+    n = np.shape(a)[0]
+    
+    where_one = np.where(a == 1, 1, 0)
+    one_sum = np.sum(where_one, axis=0)
+    
+    return one_sum/n
+   
 def mode(a, null_value = NO_LABEL, axis = 0):
 
     '''
